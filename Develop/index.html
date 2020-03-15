@@ -20,13 +20,52 @@
     <p id="currentDay" class="lead"></p>
   </header>
   <div class="container">
-      <br>
-      <br>
+    <br>
+    <br>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
-  <script src="script.js"></script>
+  <script>
+
+    var times = ["09:00AM", "10:00AM", "11:00AM", "12:00PM", "01:00PM", "02:00PM", "03:00PM", "04:00PM"];
+
+    function renderTimeSlots() {
+      $(".container").empty();
+
+      for (var i = 0; i < times.length; i++) {
+        var timeSlot = $("<div>").attr("class", "input-group");
+        var timeLabel = $("<div>").attr("class", "input-group-prepend").text(times[i]);
+        var inputField = $("<textarea>").addClass("form-control").attr("id", "input" + i);
+        var saveBtn = $("<button>").attr("data-timeSlot", times[i]).attr("data-input", "input" + i).addClass("saveBtn").addClass("input-group-append").text("Save");
+
+        inputField.text(localStorage.getItem(times[i]));
+        
+        timeSlot.append(timeLabel, inputField, saveBtn);
+        $(".container").append(timeSlot);
+      }
+    }
+
+    $(".container").on("click", ".saveBtn", function (event) {
+      event.preventDefault();
+
+      var hour = $(this).attr("data-timeSlot");
+      var buttonID = $(this).attr("data-input");
+
+      console.log(inputID);
+
+      var inputID = "#" + buttonID;
+      console.log(inputID);
+
+      var message = $(inputID).val();
+      console.log(message);
+
+      localStorage.setItem(hour, message);
+
+    })
+
+    renderTimeSlots();
+  </script>
 </body>
 
 </html>
