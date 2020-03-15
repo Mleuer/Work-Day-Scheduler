@@ -25,10 +25,20 @@
   </div>
 
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+  <script src="moment.js"></script>
   <script>
 
     var times = ["09:00AM", "10:00AM", "11:00AM", "12:00PM", "01:00PM", "02:00PM", "03:00PM", "04:00PM"];
+    var prettyTimes = [9, 10, 11, 12, 13, 14, 15, 16];
+
+    function renderDate() {
+      var dateDisplay = $("#currentDay");
+
+      var now = moment().format("dddd MMMM D");
+
+      dateDisplay.text(now);
+
+    }
 
     function renderTimeSlots() {
       $(".container").empty();
@@ -36,10 +46,24 @@
       for (var i = 0; i < times.length; i++) {
         var timeSlot = $("<div>").attr("class", "input-group");
         var timeLabel = $("<div>").attr("class", "input-group-prepend").text(times[i]);
-        var inputField = $("<textarea>").addClass("form-control").attr("id", "input" + i);
+        var inputField = $("<textarea>").addClass("form-control").attr("id", "input" + i).attr("data-time", prettyTimes[i]);
         var saveBtn = $("<button>").attr("data-timeSlot", times[i]).attr("data-input", "input" + i).addClass("saveBtn").addClass("input-group-append").text("Save");
 
         inputField.text(localStorage.getItem(times[i]));
+
+        var inputFieldTime = prettyTimes[i];
+        var now = moment().format("H");
+
+        if(inputFieldTime < now) {
+          inputField.addClass("gray");
+        }
+        else if(inputFieldTime == now) {
+          inputField.addClass("red");
+        }
+        else {
+          inputField.addClass("green");
+        }
+        
         
         timeSlot.append(timeLabel, inputField, saveBtn);
         $(".container").append(timeSlot);
@@ -63,8 +87,10 @@
       localStorage.setItem(hour, message);
 
     })
-
+    
+    renderDate();
     renderTimeSlots();
+
   </script>
 </body>
 
